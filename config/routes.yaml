@@ -1,0 +1,3 @@
+process_documents:
+    path: /process-documents
+    controller: App\Controller\DocumentController::processDocuments

@@ -1,0 +1,26 @@
+parameters:
+    document_storage_directory: '%kernel.project_dir%/public/documents'  # Path for storing files
+
+services:
+    _defaults:
+        autowire: true  
+        autoconfigure: true
+        
+    Symfony\Contracts\HttpClient\HttpClientInterface: '@http_client'
+
+    App\Service\DocumentProcessorService:
+        arguments:
+            $client: '@http_client'
+            $fileStorageService: '@App\Service\DocumentFileStorageService'
+            $logger: '@logger'
+            $params: '@parameter_bag'
+
+    App\Service\DocumentFileStorageService:
+        arguments:
+            $storageDirectory: '%document_storage_directory%'
+
+    App\Controller\DocumentController:
+        arguments:
+            $documentProcessorService: '@App\Service\DocumentProcessorService'
+        tags:
+            - { name: 'controller.service_arguments' }
